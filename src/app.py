@@ -1,32 +1,31 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
-
-value = 0  # globaali laskuri
+counter = 0
 
 @app.route("/")
 def index():
-    return render_template("index.html", value=value)
+    return render_template("index.html", value=counter)
 
 @app.route("/increment", methods=["POST"])
 def increment():
-    global value
-    value += 1
+    global counter
+    counter += 1
     return redirect("/")
 
 @app.route("/reset", methods=["POST"])
 def reset():
-    global value
-    value = 0
+    global counter
+    counter = 0
     return redirect("/")
 
 @app.route("/set", methods=["POST"])
-def set_value():
-    global value
+def set_counter():
+    global counter
     try:
-        value = int(request.form["value"])
-    except:
-        pass
+        counter = int(request.form.get("value", 0))
+    except ValueError:
+        counter = 0
     return redirect("/")
 
 if __name__ == "__main__":

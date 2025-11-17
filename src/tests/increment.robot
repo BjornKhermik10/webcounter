@@ -1,24 +1,15 @@
 *** Settings ***
-Library    SeleniumLibrary
-Suite Setup    Open Browser To App
-Suite Teardown    Close Browser
-
-*** Keywords ***
-Open Browser To App
-    Open Browser    http://localhost:5001    Chrome
-    Maximize Browser Window
-
-Reset Counter
-    Click Button    reset
-    Page Should Contain    nappia painettu 0 kertaa
+Resource  resource.robot
+Suite Setup  Open And Configure Browser
+Suite Teardown  Close Browser
 
 *** Test Cases ***
 At Start The Counter Is Zero
-    Reset Counter
-    Page Should Contain    nappia painettu 0 kertaa
+    Go To  ${HOME_URL}
+    Page Should Contain  nappia painettu 0 kertaa
 
 When Button Pressed Twice The Counter Is Two
-    Reset Counter
-    Click Button    increment
-    Click Button    increment
-    Page Should Contain    nappia painettu 2 kertaa
+    Go To  ${HOME_URL}
+    Click Button  Paina
+    Click Button  Paina
+    Page Should Contain  nappia painettu 2 kertaa

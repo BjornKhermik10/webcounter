@@ -1,30 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Laskuri</title>
+    <meta charset="UTF-8">
+    <title>Laskuri</title>
 </head>
 <body>
-  <h2>Ohtulaskuri</h2>
+    <h2>Ohtulaskuri</h2>
+    <div>nappia painettu {{ value }} kertaa</div>
 
-  <div>nappia painettu {{ value }} kertaa</div>
+    <form action="/increment" method="POST">
+        <button type="submit">Paina</button>
+    </form>
 
-  <!-- Increment -->
-  <form action="/increment" method="POST">
-    <button type="submit" id="increment">Paina</button>
-  </form>
+    <form action="/reset" method="POST">
+        <button type="submit">Nollaa</button>
+    </form>
 
-  <!-- Reset -->
-  <form action="/reset" method="POST">
-    <button type="submit" id="reset">Nollaa</button>
-  </form>
-
-  <!-- Set counter -->
-  <h3>Set counter</h3>
-  <form action="/set" method="POST">
-    <input type="number" name="value" id="set-value" required>
-    <button type="submit" id="set-button">Set</button>
-  </form>
-
+    <h3>Set counter</h3>
+    <form action="/set" method="POST">
+        <input type="number" name="value" id="set-value" required>
+        <button type="submit" id="set-button">Set</button>
+    </form>
 </body>
 </html>
