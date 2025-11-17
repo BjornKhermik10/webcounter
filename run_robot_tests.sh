@@ -1,25 +1,32 @@
-#!/bin/bash
+Write-Host "Running tests"
 
-echo "Running tests"
+# Käynnistetään Flask-palvelin taustalle
+$flask = Start-Process -FilePath "poetry" -ArgumentList "run python src/index.py" -PassThru
+Write-Host "Started Flask server (PID $($flask.Id))"
 
-# käynnistetään Flask-palvelin taustalle
-poetry run python3 src/index.py &
+# Odotetaan että palvelin vastaa portissa 5001
+Write-Host "Waiting for server to be ready..."
+$serverReady = $false
 
-echo "started Flask server"
+while (-not $serverReady) {
+    try {
+        $response = Invoke-WebRequest -Uri "http://localhost:5001" -UseBasicParsing -TimeoutSec 1
+        if ($response.StatusCode -eq 200) {
+            $serverReady = $true
+        }
+    } catch {
+        Start-Sleep -Seconds 1
+    }
+}
 
-# odetetaan, että palvelin on valmiina ottamaan vastaan pyyntöjä
-while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:5001)" != "200" ]];
-  do sleep 1;
-done
+Write-Host "Flask server is ready"
 
-echo "Flask server is ready"
-
-# suoritetaan testit
+# Suoritetaan testit
 poetry run robot --variable HEADLESS:true src/tests
+$exitCode = $LASTEXITCODE
 
-status=$?
+# Pysäytetään Flask-palvelin
+Write-Host "Stopping Flask server"
+Stop-Process -Id $flask.Id -Force
 
-# pysäytetään Flask-palvelin portissa 5001
-kill $(lsof -t -i:5001)
-
-exit $status
+exit $exitCode

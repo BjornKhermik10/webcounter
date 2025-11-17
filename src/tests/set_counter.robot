@@ -13,12 +13,14 @@ Reset Counter
     Page Should Contain    nappia painettu 0 kertaa
 
 *** Test Cases ***
-At Start The Counter Is Zero
+Setting Counter To Ten Works
     Reset Counter
-    Page Should Contain    nappia painettu 0 kertaa
+    Input Text    value    10
+    Click Button  set-button
+    Page Should Contain    nappia painettu 10 kertaa
 
-When Button Pressed Twice The Counter Is Two
+Setting Counter To Zero Works
     Reset Counter
-    Click Button    increment
-    Click Button    increment
-    Page Should Contain    nappia painettu 2 kertaa
+    Input Text    value    0
+    Click Button  set-button
+    Page Should Contain    nappia painettu 0 kertaa
